@@ -1,0 +1,14 @@
+import scapy.all as scapy
+
+def scan(ip):
+    arp_request = scapy.ARP(pdst=ip)
+    broadcast = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
+    packet = broadcast/arp_request
+    answered_list = scapy.srp(packet, timeout=1, verbose=False)[0]
+
+    if len(answered_list) == 0:
+        print("[+] The network has Client Isolation enabled.")
+    else:
+        print("[!] Devices detected on the network.")
+
+scan("192.168.1.1/24")
